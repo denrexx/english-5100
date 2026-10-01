@@ -8,7 +8,7 @@ from pathlib import Path
 from urllib.parse import unquote, urlsplit
 
 ROOT = Path(__file__).resolve().parent
-PUBLIC = {'index.html', 'app.js', 'style.css', 'tokens.css', 'data.json', 'sw.js', 'icon.svg', 'manifest.webmanifest'}
+PUBLIC = {'index.html', 'app.js', 'style.css', 'tokens.css', 'data.json', 'sw.js', 'manifest.webmanifest'}
 
 
 class Handler(SimpleHTTPRequestHandler):
@@ -67,7 +67,7 @@ if __name__ == '__main__':
         server = ThreadingHTTPServer((args.host, args.port), functools.partial(Handler, directory=str(ROOT)))
     except OSError as error:
         raise SystemExit(f'Не удалось запустить сайт: {error}. Попробуйте ./start.sh --port 8081')
-    print(f'Lexi: http://{args.host}:{args.port}\nОстановить: Ctrl+C', flush=True)
+    print(f'English 5100: http://{args.host}:{args.port}\nОстановить: Ctrl+C', flush=True)
     try:
         server.serve_forever()
     except KeyboardInterrupt:

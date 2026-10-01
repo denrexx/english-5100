@@ -55,3 +55,29 @@ html{font-size:18px}
  .feedback-line{font-size:.92rem;min-height:0}.feedback-line:empty{display:none}.session-note{font-size:.69rem;margin-top:20px}
  .word-text strong{font-size:1.1rem}.word-text small{font-size:1rem}.toolbar .segmented button{font-size:.76rem}
 }
+
+.header{justify-content:space-between}.header .nav{margin-left:auto;margin-right:auto}.header-tools{position:relative}
+.demo-top{justify-content:flex-end}.demo-top:empty,.demo-bottom>span:empty{display:none}
+.demo-bottom{justify-content:flex-end}
+.level-arrow,.mode-card .arrow,.button .arrow{display:inline-block;transition:transform .26s var(--ease-out)}
+.level-card:hover .level-arrow,.mode-card:hover .arrow,.button:hover .arrow{transform:translate(3px,-3px)}
+.icon-button svg{transition:transform .25s var(--ease-out)}.icon-button:hover svg{transform:scale(1.12)}
+.hero-art .demo-card{animation:card-float 5.2s ease-in-out infinite;animation-play-state:paused}
+.hero-art .stack-back{animation:back-float 6.4s ease-in-out infinite;animation-play-state:paused}
+.hero-art .stack-back.second{animation-name:second-float;animation-delay:-2s}
+.hero-art .art-spark{animation:spark-turn 7s ease-in-out infinite;animation-play-state:paused}
+.hero-art.motion-visible .demo-card,.hero-art.motion-visible .stack-back,.hero-art.motion-visible .art-spark{animation-play-state:running}
+.tab-hidden .hero-art .demo-card,.tab-hidden .hero-art .stack-back,.tab-hidden .hero-art .art-spark{animation-play-state:paused}
+.question-word{animation:word-arrive .36s var(--ease-out) both}
+.answer.good .answer-mark{animation:check-arrive .36s var(--ease-out) both}
+.unknown-button:active{transform:scale(.965)}
+.loading-spinner{display:block;width:32px;height:32px;border:3px solid var(--line);border-top-color:var(--rose-ink);border-radius:50%;margin:0 auto 20px;animation:spinner-turn 1s linear infinite}
+@keyframes card-float{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-7px) rotate(1deg)}}
+@keyframes back-float{0%,100%{transform:translate(27px,2px) rotate(13deg)}50%{transform:translate(31px,-3px) rotate(15deg)}}
+@keyframes second-float{0%,100%{transform:translate(12px,-4px) rotate(7deg)}50%{transform:translate(15px,-9px) rotate(9deg)}}
+@keyframes spark-turn{0%,100%{transform:rotate(0) scale(1);opacity:.6}50%{transform:rotate(30deg) scale(1.12);opacity:1}}
+@keyframes word-arrive{from{opacity:0;transform:translateY(8px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes check-arrive{from{opacity:0;transform:scale(.5) rotate(-20deg)}to{opacity:1;transform:scale(1) rotate(0)}}
+@keyframes spinner-turn{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){.hero-art .demo-card,.hero-art .stack-back,.hero-art .art-spark,.question-word,.answer-mark,.loading-spinner{animation:none}.level-card:hover .level-arrow,.mode-card:hover .arrow,.button:hover .arrow,.icon-button:hover svg{transform:none}}
+@media(max-width:700px){.header{padding-top:16px;min-height:86px;flex-wrap:nowrap;gap:10px}.header .nav{order:0;min-width:0;width:auto;flex:1;margin:0}.nav a{padding:10px 6px;font-size:.72rem}.header-tools{gap:6px;margin-left:0}.header-tools .icon-button{width:38px;height:38px}.nav{gap:0;padding:4px}.nav a{white-space:nowrap}}
