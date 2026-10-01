@@ -1,12 +1,13 @@
 'use strict';
-const CORE='lexi-core-v6';
+const CORE='lexi-core-v7';
 const AUDIO='lexi-audio-v2';
-const files=['./','index.html','style.css','tokens.css','app.js','data.json','manifest.webmanifest'];
+const files=['./','index.html','style.css','tokens.css','app.js','sync.js','data.json','manifest.webmanifest'];
 self.addEventListener('install',event=>event.waitUntil(caches.open(CORE).then(cache=>cache.addAll(files)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('lexi-')&&k!==CORE&&k!==AUDIO).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
 self.addEventListener('fetch',event=>{
   const url=new URL(event.request.url);
   if(event.request.method!=='GET'||url.origin!==location.origin)return;
+  if(url.pathname.includes('/api/'))return;
   if(url.pathname.includes('/audio/')) {
     event.respondWith((async()=>{
       let cache;
