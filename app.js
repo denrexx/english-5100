@@ -91,13 +91,42 @@ function suspendSession() {if(!session)return;stopClock();save();session=null;st
 function nextLevel(){const total=levelRanges().length;for(let i=0;i<total;i++)if(!Object.hasOwn(state.levels,i))return i;return 0;}
 function home() {
   updateHeader('learn');const level=nextLevel(),ranges=levelRanges(),count=ranges.length,saved=state.session;
+  const firstCard=data.words.find(item=>item.word==='world')||{id:'words:world',word:'world',translation:'мир'};
+  const secondCard=randomDemo([firstCard.id]);
   main.innerHTML=`${!storageAvailable?'<div class="storage-warning">Прогресс не сохраняется в этом браузере. Резервную копию можно скачать в настройках</div>':''}
   <section class="hero"><div class="hero-copy"><h1>Английский<br><span>5100 слов</span></h1><p>5100 самых частотных слов современного американского английского<br>Список составлен на основе более 20 миллионов субтитров с YouTube и TikTok</p><div class="hero-actions"><button class="button" data-action="${saved?'resume':'level'}" data-value="${level}">${saved?'Продолжить':'Начать учиться'}<span class="arrow">↗</span></button><button class="text-button" data-action="start" data-value="test">Проверить себя →</button></div></div>
-  <div class="hero-art" aria-hidden="true"><span class="art-spark">✧</span><div class="card-stack" id="card-stack"><div class="stack-back"></div><div class="stack-back second"></div><div class="demo-card"><div class="demo-top"><span></span><span>EN</span></div><div><div class="demo-word">world</div><div class="demo-translation">мир</div></div><div class="demo-bottom"><span></span><span>↗</span></div></div></div></div></section>
+  <div class="hero-art"><span class="art-spark" aria-hidden="true">✧</span><div class="card-stack" id="card-stack"><div class="stack-back" aria-hidden="true"></div><div class="stack-back second" aria-hidden="true"></div>${demoCard(secondCard,true)}${demoCard(firstCard)}</div></div></section>
   <div class="overview"><div class="overview-item"><strong>${num(data.words.length)}</strong><span>полезных слов</span></div><div class="overview-item"><strong>${count}</strong><span>уровней практики</span></div><div class="overview-item"><strong>${data.phrasal.length}</strong><span>фразовых глаголов</span></div><div class="overview-item"><strong>${num(state.known.length)}</strong><span>слов уже знакомо</span></div></div>
   <section aria-labelledby="levels-title"><div class="section-head"><div><h2 id="levels-title">Уровни</h2></div><span class="section-label">1000 слов · последний 1100</span></div><div class="levels">${Array.from({length:count},(_,i)=>{const {first,last}=ranges[i],done=Object.hasOwn(state.levels,i),resume=saved?.mode==='level'&&saved.level===i,progress=done?100:resume?Math.round(saved.position/saved.queue.length*100):0;return `<button class="level-card ${i===level?'featured':''}" data-action="level" data-value="${i}"><div class="level-top"><span class="level-no">${String(i+1).padStart(2,'0')} / УРОВЕНЬ</span><span class="level-arrow">${done?'✓':'↗'}</span></div><strong>Слова ${num(first)}–${num(last)}</strong><small>${done?`Пройден · ${time(state.levels[i])}`:resume?`В процессе · ${progress}%`:`${last-first+1} слов`}</small><div class="mini-track"><i style="transform:scaleX(${progress/100})"></i></div></button>`;}).join('')}<button class="level-card" data-action="custom"><div class="level-top"><span class="level-no">ДИАПАЗОН</span><span class="level-arrow">+</span></div><strong>Свой уровень</strong><small>Любой диапазон слов</small></button></div></section>
   <section aria-labelledby="practice-title"><div class="section-head"><div><h2 id="practice-title">Другие режимы</h2></div></div><div class="modes">${modeCard('test','◎','Проверить себя','50 вопросов из всего словаря')}${modeCard('mistakes','↺','Работа над ошибками',`${Object.keys(state.mistakes).length} слов для повторения`)}${modeCard('phrasal','↗','Фразовые глаголы',`${data.phrasal.length} фразовых глаголов`)}${modeCard('unknowns','◇','Пока не знаю',`${state.unknown.length} слов в вашей коллекции`)}</div></section>`;
   attachTilt();observeMotion();enter();
+}
+function randomDemo(excluded=[]){
+  let item;
+  do{item=data.words[Math.floor(Math.random()*data.words.length)];}while(excluded.includes(item.id)&&data.words.length>excluded.length);
+  return item;
+}
+function demoCard(item,preview=false){
+  const size=Math.max(1.15,Math.min(3,24/item.word.length));
+  return `<button type="button" class="demo-card ${preview?'preview':'front'}" data-id="${esc(item.id)}" data-action="demo-next" style="--demo-word-size:${size}rem" ${preview?'disabled tabindex="-1" aria-hidden="true"':`aria-label="Следующее слово, ${esc(item.word)}: ${esc(item.translation)}"`}><span class="demo-top"><span>EN</span></span><span><span class="demo-word" lang="en">${esc(item.word)}</span><span class="demo-translation">${esc(item.translation)}</span></span><span class="demo-bottom"><span aria-hidden="true">←</span></span></button>`;
+}
+function nextDemo(){
+  const stack=$('#card-stack'),current=stack?.querySelector('.front'),next=stack?.querySelector('.preview');
+  if(!current||!next)return;
+  const restoreFocus=document.activeElement===current;
+  const from=getComputedStyle(current).transform;
+  const nextFrom=getComputedStyle(next).transform;
+  current.classList.replace('front','departing');current.disabled=true;current.setAttribute('aria-hidden','true');current.tabIndex=-1;
+  next.classList.replace('preview','front');next.disabled=false;next.removeAttribute('aria-hidden');next.removeAttribute('tabindex');
+  const item=byId.get(next.dataset.id);
+  next.setAttribute('aria-label',`Следующее слово, ${item.word}: ${item.translation}`);
+  stack.insertAdjacentHTML('afterbegin',demoCard(randomDemo([current.dataset.id,next.dataset.id]),true));
+  if(restoreFocus)next.focus({preventScroll:true});
+  if(reducedMotion.matches){current.remove();return;}
+  const distance=Math.max(350,stack.getBoundingClientRect().width*1.3);
+  const outgoing=current.animate([{transform:from,opacity:1},{transform:`translateX(${-distance}px) translateY(-18px) rotate(-22deg)`,opacity:0}],{duration:420,easing:'cubic-bezier(.32,.72,0,1)',fill:'forwards'});
+  outgoing.finished.then(()=>current.remove()).catch(()=>current.remove());
+  next.animate([{transform:nextFrom},{transform:'translate(0,0) rotate(0) scale(1)'}],{duration:430,easing:'cubic-bezier(.23,1,.32,1)'});
 }
 function modeCard(mode,icon,title,description){return `<button class="mode-card" data-action="start" data-value="${mode}"><span class="mode-icon">${icon}</span><span><strong>${title}</strong><small>${description}</small></span><span class="arrow">↗</span></button>`;}
 function attachTilt(){const stack=$('#card-stack'),area=$('.hero-art');if(!stack||reducedMotion.matches||!matchMedia('(hover: hover) and (pointer: fine)').matches)return;let x=0,y=0,vx=0,vy=0,tx=0,ty=0,frame=0,last=0;const step=now=>{const dt=Math.min((now-last)/1000||.016,.032);last=now;vx+=(190*(tx-x)-27*vx)*dt;vy+=(190*(ty-y)-27*vy)*dt;x+=vx*dt;y+=vy*dt;stack.style.transform=`rotate(-8deg) rotateX(${x}deg) rotateY(${-9+y}deg)`;if(Math.abs(tx-x)+Math.abs(ty-y)+Math.abs(vx)+Math.abs(vy)>.05)frame=requestAnimationFrame(step);else frame=0;};const start=()=>{if(!frame){last=performance.now();frame=requestAnimationFrame(step);}};area.addEventListener('pointermove',e=>{const r=area.getBoundingClientRect();tx=-(e.clientY-r.top-r.height/2)/r.height*10;ty=(e.clientX-r.left-r.width/2)/r.width*12;start();});area.addEventListener('pointerleave',()=>{tx=ty=0;start();});}
@@ -170,6 +199,7 @@ document.addEventListener('click',e=>{
   const button=e.target.closest('button');if(button&&session&&button.dataset.action!=='pause')touchClock();
   const el=e.target.closest('[data-action]');if(el?.dataset.action==='retry'){location.reload();return;}if(!el||el.disabled||!data)return;
   const action=el.dataset.action,value=el.dataset.value;
+  if(action==='demo-next')nextDemo();
   if(action==='level')choose('level',Number(value));if(action==='start')choose(value);if(action==='custom')customDialog();if(action==='resume')resume();
   if(action==='answer')answerQuestion(Number(value));if(action==='next'&&session?.feedback)advance();if(action==='unknown')unknownQuestion();if(action==='pause')togglePause();
   if(action==='speak')speak(byId.get(session?.queue[session?.position]));if(action==='speak-id')speak(byId.get(el.dataset.id));

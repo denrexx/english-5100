@@ -3,6 +3,9 @@
 import argparse
 import functools
 import gzip
+import json
+import socket
+import subprocess
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
@@ -57,17 +60,38 @@ class Handler(SimpleHTTPRequestHandler):
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Lexi local server')
+    parser = argparse.ArgumentParser(description='English 5100 server')
     parser.add_argument('--port', type=int, default=8080)
     parser.add_argument('--host', default='127.0.0.1')
+    parser.add_argument('--lan', action='store_true', help='Открыть сайт для устройств в локальной сети')
     args = parser.parse_args()
+    if args.lan:
+        args.host = '0.0.0.0'
     COMPRESSED = {name: ((ROOT / name).stat().st_mtime_ns, gzip.compress((ROOT / name).read_bytes(), compresslevel=6)) for name in PUBLIC}
     ThreadingHTTPServer.allow_reuse_address = True
     try:
         server = ThreadingHTTPServer((args.host, args.port), functools.partial(Handler, directory=str(ROOT)))
     except OSError as error:
         raise SystemExit(f'Не удалось запустить сайт: {error}. Попробуйте ./start.sh --port 8081')
-    print(f'English 5100: http://{args.host}:{args.port}\nОстановить: Ctrl+C', flush=True)
+    if args.host == '0.0.0.0':
+        addresses = set()
+        try:
+            interfaces = json.loads(subprocess.check_output(['ip', '-j', '-4', 'address', 'show'], text=True))
+            for interface in interfaces:
+                if interface['ifname'].startswith(('lo', 'tun', 'tap', 'docker', 'veth', 'br-', 'wg')):
+                    continue
+                addresses.update(a['local'] for a in interface.get('addr_info', []) if a.get('scope') == 'global')
+        except (OSError, ValueError):
+            try:
+                addresses.update(socket.gethostbyname_ex(socket.gethostname())[2])
+            except OSError:
+                pass
+        print(f'На компьютере: http://localhost:{args.port}', flush=True)
+        for address in sorted(addresses):
+            print(f'В локальной сети: http://{address}:{args.port}', flush=True)
+    else:
+        print(f'English 5100: http://{args.host}:{args.port}', flush=True)
+    print('Остановить: Ctrl+C', flush=True)
     try:
         server.serve_forever()
     except KeyboardInterrupt:
