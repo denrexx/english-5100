@@ -1,5 +1,5 @@
 'use strict';
-const CORE='lexi-core-v5';
+const CORE='lexi-core-v6';
 const AUDIO='lexi-audio-v2';
 const files=['./','index.html','style.css','tokens.css','app.js','data.json','manifest.webmanifest'];
 self.addEventListener('install',event=>event.waitUntil(caches.open(CORE).then(cache=>cache.addAll(files)).then(()=>self.skipWaiting())));

@@ -11,7 +11,7 @@ let state = initialState(), data, byId, session = null, timerHandle, toastHandle
 let clock = {base:0,last:0,running:false,manual:false};
 let voiceJob=0;
 let motionObserver=null;
-function stopVoice(){voiceJob++;audio.onerror=null;audio.pause();if('speechSynthesis' in window)speechSynthesis.cancel();}
+function stopVoice(){voiceJob++;audio.onerror=null;audio.pause();audio.removeAttribute('src');audio.load();if('speechSynthesis' in window)speechSynthesis.cancel();}
 try {const raw = localStorage.getItem(STORE); if(raw) state = normalizeState(JSON.parse(raw));} catch {storageAvailable = false;}
 document.documentElement.dataset.theme = state.settings.theme;
 function normalizeState(raw) {
@@ -178,7 +178,7 @@ function renderResult(r){main.innerHTML=`<section class="result"><div class="res
 function togglePause(){if(!session)return;if(clock.manual){clock.manual=false;touchClock();}else{stopClock();clock.manual=true;stopVoice();}save();exercise();}
 function speak(item,auto=false){
   if(!state.settings.sound){if(!auto)toast('Включите произношение в настройках');return;}
-  if(!item)return;stopVoice();const job=voiceJob;audio=new Audio(`audio/${item.audio}.ogg`);audio.preload='none';audio.onerror=()=>{if(job===voiceJob)speechFallback(item,auto);};audio.play().catch(e=>{if(job!==voiceJob)return;if(e.name==='NotAllowedError'){if(!auto)toast('Нажмите на значок звука, чтобы разрешить воспроизведение');}else if(e.name!=='AbortError')speechFallback(item,auto);});
+  if(!item)return;stopVoice();const job=voiceJob;audio.preload='none';audio.src=`audio/${item.audio}.ogg`;audio.onerror=()=>{if(job===voiceJob)speechFallback(item,auto);};audio.play().catch(e=>{if(job!==voiceJob)return;if(e.name==='NotAllowedError'){if(!auto)toast('Нажмите на значок звука, чтобы разрешить воспроизведение');}else if(e.name!=='AbortError')speechFallback(item,auto);});
 }
 function speechFallback(item,auto){if(!('speechSynthesis' in window)){if(!auto)toast('Произношение сейчас недоступно');return;}const voices=speechSynthesis.getVoices(),voice=voices.find(v=>v.lang==='en-US')||voices.find(v=>v.lang.startsWith('en'));if(!voice){if(!auto)toast('Для этого слова нет записи; английский голос браузера недоступен');return;}speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(item.word);u.lang='en-US';u.voice=voice;u.rate=.9;speechSynthesis.speak(u);}
 function customDialog(){modal('Ваш диапазон',`<p class="dialog-copy">Можно пройти 10 слов или целую тысячу. Выберите диапазон от 1 до ${num(data.words.length)}</p><form id="range-form"><div class="range-fields"><label>Первое слово<input id="range-first" type="number" min="1" max="${data.words.length}" value="1" required></label><label>Последнее слово<input id="range-last" type="number" min="1" max="${data.words.length}" value="10" required></label></div><p class="field-error" id="range-error" role="alert"></p><button class="button" type="submit" style="width:100%">Выбрать направление →</button></form>`);$('#range-form').onsubmit=e=>{e.preventDefault();const a=Number($('#range-first').value),b=Number($('#range-last').value);if(!Number.isInteger(a)||!Number.isInteger(b)||a<1||b<a||b>data.words.length){$('#range-error').textContent='Укажите правильный диапазон: первое слово ≤ последнего';return;}choose('custom',null,[a,b]);};}
