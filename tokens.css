@@ -1,0 +1,185 @@
+:root {
+
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display",
+    "Helvetica Neue", "Segoe UI", system-ui, sans-serif;
+  --font-rounded: "SF Pro Rounded", -apple-system, "Nunito", system-ui, sans-serif;
+  --font-serif: "New York", ui-serif, Georgia, "Times New Roman", serif;
+  --font-mono: "SF Mono", ui-monospace, "JetBrains Mono", Menlo, monospace;
+
+  --text-large-title: 2.125rem;
+  --text-title-1:     1.75rem;
+  --text-title-2:     1.375rem;
+  --text-title-3:     1.25rem;
+  --text-headline:    1.0625rem;
+  --text-body:        1.0625rem;
+  --text-callout:     1rem;
+  --text-subhead:     0.9375rem;
+  --text-footnote:    0.8125rem;
+  --text-caption-1:   0.75rem;
+  --text-caption-2:   0.6875rem;
+
+  --tracking-tight:  -0.022em;
+  --tracking-snug:   -0.014em;
+  --tracking-normal:  0em;
+  --tracking-wide:    0.01em;
+
+  --leading-tight:  1.05;
+  --leading-snug:   1.2;
+  --leading-normal: 1.35;
+  --leading-relaxed: 1.5;
+
+  --weight-regular:  400;
+  --weight-medium:   500;
+  --weight-semibold: 600;
+  --weight-bold:     700;
+
+  --space-1:  0.125rem;
+  --space-2:  0.25rem;
+  --space-3:  0.5rem;
+  --space-4:  0.75rem;
+  --space-5:  1rem;
+  --space-6:  1.25rem;
+  --space-7:  1.5rem;
+  --space-8:  2rem;
+  --space-9:  2.5rem;
+  --space-10: 3rem;
+  --space-12: 4rem;
+
+  --radius-xs:  6px;
+  --radius-sm:  8px;
+  --radius-md:  12px;
+  --radius-lg:  16px;
+  --radius-xl:  22px;
+  --radius-2xl: 28px;
+  --radius-capsule: 999px;
+
+  --shadow-1: 0 1px 2px rgba(0,0,0,0.04), 0 1px 1px rgba(0,0,0,0.06);
+  --shadow-2: 0 2px 8px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.08);
+  --shadow-3: 0 8px 24px rgba(0,0,0,0.10), 0 2px 6px rgba(0,0,0,0.08);
+  --shadow-4: 0 16px 48px rgba(0,0,0,0.14), 0 4px 12px rgba(0,0,0,0.10);
+  --shadow-glass: 0 8px 32px rgba(0,0,0,0.18);
+
+  --ease-out:    cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-ios:    cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-snappy: cubic-bezier(0.4, 0, 0.2, 1);
+
+  --duration-instant: 100ms;
+  --duration-fast:    200ms;
+  --duration-base:    300ms;
+  --duration-slow:    450ms;
+
+  --blue:   #007AFF;  --green:  #34C759;  --indigo: #5856D6;  --orange: #FF9500;
+  --pink:   #FF2D55;  --purple: #AF52DE;  --red:    #FF3B30;  --teal:   #30B0C7;
+  --cyan:   #32ADE6;  --yellow: #FFCC00;  --mint:   #00C7BE;  --brown:  #A2845E;
+  --accent: var(--blue);
+
+  --gray-1: #8E8E93; --gray-2: #AEAEB2; --gray-3: #C7C7CC;
+  --gray-4: #D1D1D6; --gray-5: #E5E5EA; --gray-6: #F2F2F7;
+
+  --bg:            #FFFFFF;
+  --bg-secondary:  #F2F2F7;
+  --bg-tertiary:   #FFFFFF;
+  --bg-grouped:    #F2F2F7;
+
+  --label:            rgba(0, 0, 0, 1);
+  --label-secondary:  rgba(60, 60, 67, 0.60);
+  --label-tertiary:   rgba(60, 60, 67, 0.30);
+  --label-quaternary: rgba(60, 60, 67, 0.18);
+
+  --separator:        rgba(60, 60, 67, 0.29);
+  --separator-opaque: #C6C6C8;
+  --fill-1: rgba(120, 120, 128, 0.20);
+  --fill-2: rgba(120, 120, 128, 0.16);
+  --fill-3: rgba(120, 120, 128, 0.12);
+  --fill-4: rgba(120, 120, 128, 0.08);
+
+  --material-ultrathin-tint: rgba(255, 255, 255, 0.44);
+  --material-thin-tint:      rgba(255, 255, 255, 0.60);
+  --material-regular-tint:   rgba(255, 255, 255, 0.72);
+  --material-thick-tint:     rgba(255, 255, 255, 0.84);
+  --material-blur:      20px;
+  --material-blur-thin: 12px;
+  --material-saturate:  180%;
+
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --blue:   #0A84FF;  --green:  #30D158;  --indigo: #5E5CE6;  --orange: #FF9F0A;
+    --pink:   #FF375F;  --purple: #BF5AF2;  --red:    #FF453A;  --teal:   #40C8E0;
+    --cyan:   #64D2FF;  --yellow: #FFD60A;  --mint:   #63E6E2;  --brown:  #AC8E68;
+
+    --gray-1: #8E8E93; --gray-2: #636366; --gray-3: #48484A;
+    --gray-4: #3A3A3C; --gray-5: #2C2C2E; --gray-6: #1C1C1E;
+
+    --bg:            #000000;
+    --bg-secondary:  #1C1C1E;
+    --bg-tertiary:   #2C2C2E;
+    --bg-grouped:    #000000;
+
+    --label:            rgba(255, 255, 255, 1);
+    --label-secondary:  rgba(235, 235, 245, 0.60);
+    --label-tertiary:   rgba(235, 235, 245, 0.30);
+    --label-quaternary: rgba(235, 235, 245, 0.16);
+
+    --separator:        rgba(84, 84, 88, 0.60);
+    --separator-opaque: #38383A;
+    --fill-1: rgba(120, 120, 128, 0.36);
+    --fill-2: rgba(120, 120, 128, 0.32);
+    --fill-3: rgba(120, 120, 128, 0.24);
+    --fill-4: rgba(120, 120, 128, 0.18);
+
+    --material-ultrathin-tint: rgba(30, 30, 32, 0.44);
+    --material-thin-tint:      rgba(30, 30, 32, 0.62);
+    --material-regular-tint:   rgba(30, 30, 32, 0.74);
+    --material-thick-tint:     rgba(30, 30, 32, 0.86);
+
+    --shadow-1: 0 1px 2px rgba(0,0,0,0.30);
+    --shadow-2: 0 2px 8px rgba(0,0,0,0.36);
+    --shadow-3: 0 8px 24px rgba(0,0,0,0.44);
+    --shadow-4: 0 16px 48px rgba(0,0,0,0.52);
+    --shadow-glass: 0 8px 32px rgba(0,0,0,0.50);
+  }
+}
+
+[data-theme="dark"] {
+  --blue:#0A84FF; --green:#30D158; --indigo:#5E5CE6; --orange:#FF9F0A;
+  --pink:#FF375F; --purple:#BF5AF2; --red:#FF453A; --teal:#40C8E0;
+  --cyan:#64D2FF; --yellow:#FFD60A; --mint:#63E6E2; --brown:#AC8E68;
+  --gray-1:#8E8E93; --gray-2:#636366; --gray-3:#48484A;
+  --gray-4:#3A3A3C; --gray-5:#2C2C2E; --gray-6:#1C1C1E;
+  --bg:#000; --bg-secondary:#1C1C1E; --bg-tertiary:#2C2C2E; --bg-grouped:#000;
+  --label:rgba(255,255,255,1); --label-secondary:rgba(235,235,245,0.6);
+  --label-tertiary:rgba(235,235,245,0.3); --label-quaternary:rgba(235,235,245,0.16);
+  --separator:rgba(84,84,88,0.6); --separator-opaque:#38383A;
+  --fill-1:rgba(120,120,128,0.36); --fill-2:rgba(120,120,128,0.32);
+  --fill-3:rgba(120,120,128,0.24); --fill-4:rgba(120,120,128,0.18);
+  --material-ultrathin-tint:rgba(30,30,32,0.44); --material-thin-tint:rgba(30,30,32,0.62);
+  --material-regular-tint:rgba(30,30,32,0.74); --material-thick-tint:rgba(30,30,32,0.86);
+}
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-optical-sizing: auto;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-size: var(--text-body);
+  line-height: var(--leading-normal);
+  letter-spacing: var(--tracking-normal);
+  color: var(--label);
+  background: var(--bg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="ru" data-theme="light">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#faf7f8"><meta name="description" content="Спокойная практика английского. 5100 слов, фразовые глаголы и ваш личный прогресс.">
+<title>Lexi — английский в своём ритме</title>
+<link rel="icon" href="icon.svg" type="image/svg+xml"><link rel="manifest" href="manifest.webmanifest">
+<link rel="stylesheet" href="tokens.css"><link rel="stylesheet" href="style.css">
+<script src="app.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">К содержимому</a>
+<header class="header wrap">
+<a href="#learn" class="brand" aria-label="Lexi, главная"><span class="brand-icon">l<span>↗</span></span>lexi<span class="brand-dot">.</span></a>
+<nav class="nav" aria-label="Основные разделы"><a href="#learn">Обучение</a><a href="#words">Мои слова <span id="words-count"></span></a><a href="#progress">Прогресс</a></nav>
+<div class="header-tools"><button class="icon-button" id="theme" aria-label="Переключить тему" title="Переключить тему">◐</button><button class="icon-button" id="settings" aria-label="Настройки" title="Настройки"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 7h16M4 17h16"/><circle cx="9" cy="7" r="3" fill="var(--surface)"/><circle cx="15" cy="17" r="3" fill="var(--surface)"/></svg></button></div>
+</header>
+<main id="main" class="wrap" tabindex="-1"><div class="loading"><span class="loading-mark">l↗</span><p>Готовим ваши слова…</p></div></main>
+<footer class="footer wrap"><span>Английский. В своём ритме.</span><span>Маленькая практика, каждый день <span class="tiny-leaf">↗</span></span></footer>
+<dialog id="dialog" aria-labelledby="dialog-title"><div class="dialog-head"><h2 id="dialog-title"></h2><button class="icon-button" id="close-dialog" aria-label="Закрыть">✕</button></div><div id="dialog-body"></div></dialog>
+<div id="toast" role="status" aria-live="polite"></div>
+<noscript><p class="wrap">Для тренировки нужно включить JavaScript.</p></noscript>
+</body>
+</html>
